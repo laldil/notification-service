@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: notification-service
+  datasource:
+    username: postgres
+    password: 7777
+    url: jdbc:postgresql://localhost:5432/notification_service
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+settings:
+  jwt:
+    secret: a7b49f2c628facf950bffe6f734ec3158c9eebc40d2c68089ca3505ce8cde38c
+    accessLifetime: 24h
+    refreshLifetime: 48h

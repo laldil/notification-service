@@ -11,7 +11,7 @@ public interface ReceiverMapper {
 
     ReceiverMapper MAPPER = Mappers.getMapper(ReceiverMapper.class);
 
-    @Mapping(target = "contacts", ignore = true)
+    @Mapping(target = "contacts", expression = "java(ReceiverContactMapper.MAPPER.mapToDtoList(entity.getContacts()))")
     ReceiverDto mapToDto(ReceiverEntity entity);
 
     @Mapping(target = "contacts", ignore = true)

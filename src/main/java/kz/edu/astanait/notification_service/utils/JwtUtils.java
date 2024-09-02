@@ -37,7 +37,7 @@ public class JwtUtils {
                 .subject(userEntity.getEmail())
                 .expiration(expiration)
                 .claim("id", userEntity.getId())
-                .claim("roles", userEntity.getRole().toString())
+                .claim("role", userEntity.getRole().toString())
                 .signWith(getKey())
                 .compact();
     }

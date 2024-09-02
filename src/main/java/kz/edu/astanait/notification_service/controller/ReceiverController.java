@@ -1,5 +1,6 @@
 package kz.edu.astanait.notification_service.controller;
 
+import jakarta.validation.Valid;
 import kz.edu.astanait.notification_service.dto.receiver.ReceiverDto;
 import kz.edu.astanait.notification_service.serivce.ReceiverService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ReceiverController {
     private final ReceiverService receiverService;
 
     @PostMapping
-    public ResponseEntity<ReceiverDto> createReceiver(@RequestBody ReceiverDto receiverDto) {
+    public ResponseEntity<ReceiverDto> createReceiver(@Valid @RequestBody ReceiverDto receiverDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(receiverService.createReceiver(receiverDto));
     }
 }

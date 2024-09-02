@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReceiverContactDto {
-    private ContactType contactType;
     private String contact;
+    private ContactType contactType;
 }

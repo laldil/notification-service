@@ -1,5 +1,6 @@
 package kz.edu.astanait.notification_service.mapper;
 
+import kz.edu.astanait.notification_service.dto.receiver.CreateReceiverRequest;
 import kz.edu.astanait.notification_service.dto.receiver.ReceiverDto;
 import kz.edu.astanait.notification_service.model.ReceiverEntity;
 import org.mapstruct.Mapper;
@@ -15,5 +16,5 @@ public interface ReceiverMapper {
     ReceiverDto mapToDto(ReceiverEntity entity);
 
     @Mapping(target = "contacts", ignore = true)
-    ReceiverEntity mapToEntity(ReceiverDto dto);
+    ReceiverEntity mapToEntity(CreateReceiverRequest dto);
 }

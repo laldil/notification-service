@@ -8,7 +8,6 @@ import kz.edu.astanait.notification_service.repository.ReceiverContactRepository
 import kz.edu.astanait.notification_service.serivce.ReceiverContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +25,6 @@ public class ReceiverContactServiceImpl implements ReceiverContactService {
     }
 
     @Override
-    @Transactional
     public List<ReceiverContactEntity> createReceiverContact(List<ReceiverContactDto> contactDtoList, ReceiverEntity receiver) {
         var contactList = contactDtoList.stream()
                 .map(contactDto -> {

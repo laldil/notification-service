@@ -1,5 +1,6 @@
 package kz.edu.astanait.notification_service.controller;
 
+import jakarta.validation.Valid;
 import kz.edu.astanait.notification_service.dto.notification.SendNotificationRequest;
 import kz.edu.astanait.notification_service.serivce.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/send")
-    public ResponseEntity<Boolean> sendNotification(@RequestBody SendNotificationRequest request) {
+    public ResponseEntity<Boolean> sendNotification(@Valid @RequestBody SendNotificationRequest request) {
         notificationService.sendNotification(request);
         return ResponseEntity.ok().body(true);
     }

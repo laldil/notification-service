@@ -24,3 +24,7 @@ settings:
     secret: a7b49f2c628facf950bffe6f734ec3158c9eebc40d2c68089ca3505ce8cde38c
     accessLifetime: 24h
     refreshLifetime: 48h
+  twilio:
+    accountSid: ${TWILIO.SID}
+    authToken: ${TWILIO.TOKEN}
+    number: ${TWILIO.NUMBER}

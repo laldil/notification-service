@@ -35,6 +35,16 @@ jobs:
           distribution: 'corretto'
           java-version: '21'
 
+      - name: Set up environment variables
+        run: echo "TWILIO_SID=${{ secrets.TWILIO_SID }}" >> $GITHUB_ENV
+          && echo "TWILIO_TOKEN=${{ secrets.TWILIO_TOKEN }}" >> $GITHUB_ENV
+          && echo "TWILIO_NUMBER=${{ secrets.TWILIO_NUMBER }}" >> $GITHUB_ENV
+          && echo "TWILIO_WHATSAPP_NUMBER=${{ secrets.TWILIO_WHATSAPP_NUMBER }}" >> $GITHUB_ENV
+          && echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
+          && echo "EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> $GITHUB_ENV
+          && echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> $GITHUB_ENV
+          && echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
+
       - name: Run tests
         run: mvn test
 

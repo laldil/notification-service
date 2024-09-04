@@ -13,22 +13,24 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class SmsNotificationSender implements NotificationSender {
+public class WhatsappNotificationSender implements NotificationSender {
+
+    private final static String WHATSAPP_PREFIX = "whatsapp:";
 
     private final TwilioProperties twilioProperties;
 
     @Override
     public ContactType getType() {
-        return ContactType.SMS;
+        return ContactType.WHATSAPP;
     }
 
     @Override
     public void sendNotification(ReceiverContactEntity contact, String message) {
-        var sms = Message.creator(
-                new PhoneNumber(contact.getContact()),
-                new PhoneNumber(twilioProperties.getNumber()),
+        var notification = Message.creator(
+                new PhoneNumber(WHATSAPP_PREFIX.concat(contact.getContact())),
+                new PhoneNumber(WHATSAPP_PREFIX.concat(twilioProperties.getWhatsappNumber())),
                 message
         ).create();
-        log.info("Sent sms notification to {}", sms.getTo());
+        log.info("Sent whatsapp notification to {}", notification.getTo());
     }
 }

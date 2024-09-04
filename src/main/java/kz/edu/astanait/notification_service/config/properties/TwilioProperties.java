@@ -13,4 +13,5 @@ public class TwilioProperties {
     private String accountSid;
     private String authToken;
     private String number;
+    private String whatsappNumber;
 }

@@ -28,3 +28,4 @@ settings:
     accountSid: ${TWILIO.SID}
     authToken: ${TWILIO.TOKEN}
     number: ${TWILIO.NUMBER}
+    whatsapp-number: ${TWILIO.WHATSAPP_NUMBER}

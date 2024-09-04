@@ -10,10 +10,10 @@ spring:
     hibernate:
       ddl-auto: update
   mail:
-    host: ${EMAIL.HOST}
-    username: ${EMAIL.USERNAME}
-    password: ${EMAIL.PASSWORD}
-    port: ${EMAIL.PORT}
+    host: ${EMAIL_HOST}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    port: ${EMAIL_PORT}
     properties:
       mail.smtp.starttls.enable: true
       mail.smtp.auth: true
@@ -25,7 +25,7 @@ settings:
     accessLifetime: 24h
     refreshLifetime: 48h
   twilio:
-    accountSid: ${TWILIO.SID}
-    authToken: ${TWILIO.TOKEN}
-    number: ${TWILIO.NUMBER}
-    whatsapp-number: ${TWILIO.WHATSAPP_NUMBER}
+    accountSid: ${TWILIO_SID}
+    authToken: ${TWILIO_TOKEN}
+    number: ${TWILIO_NUMBER}
+    whatsapp-number: ${TWILIO_WHATSAPP_NUMBER}

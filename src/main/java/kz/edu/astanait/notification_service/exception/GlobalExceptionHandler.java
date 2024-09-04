@@ -41,6 +41,12 @@ public class GlobalExceptionHandler {
         return buildResponse("Request body is missing or malformed", HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AccessForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleAccessForbiddenException(AccessForbiddenException e) {
+        log.error(e.getMessage(), e);
+        return buildResponse(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponse(String message, HttpStatus httpStatus) {
         var errorResponse = new ErrorResponse(message);
         return ResponseEntity.status(httpStatus).body(errorResponse);

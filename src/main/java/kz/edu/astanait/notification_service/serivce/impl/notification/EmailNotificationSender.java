@@ -1,13 +1,14 @@
 package kz.edu.astanait.notification_service.serivce.impl.notification;
 
+import jakarta.mail.MessagingException;
 import kz.edu.astanait.notification_service.model.ReceiverContactEntity;
 import kz.edu.astanait.notification_service.model.enums.ContactType;
 import kz.edu.astanait.notification_service.serivce.NotificationSender;
-import kz.edu.astanait.notification_service.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class EmailNotificationSender implements NotificationSender {
 
     private final JavaMailSender emailSender;
 
+    @Value("${spring.mail.username}")
+    private String email;
+
     @Override
     public ContactType getType() {
         return ContactType.EMAIL;
@@ -26,12 +30,18 @@ public class EmailNotificationSender implements NotificationSender {
     @Async
     @Override
     public void sendNotification(ReceiverContactEntity contact, String message) {
-        var mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom("Notification service");
-        mailMessage.setTo(contact.getContact());
-        mailMessage.setSubject("Subject");
-        mailMessage.setText(message);
+        try {
+            var mimeMessage = emailSender.createMimeMessage();
 
-        emailSender.send(mailMessage);
+            var helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            helper.setFrom(email);
+            helper.setTo(contact.getContact());
+            helper.setSubject("Notification from service");
+            helper.setText(message);
+
+            emailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 }

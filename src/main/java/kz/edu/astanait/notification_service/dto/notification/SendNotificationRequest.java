@@ -11,6 +11,6 @@ public class SendNotificationRequest {
     @NotNull(message = "Select contact type")
     private ContactType contactType;
 
-    @NotNull(message = "Enter the message")
-    private String message;
+    @NotNull(message = "Select message template")
+    private Long templateId;
 }

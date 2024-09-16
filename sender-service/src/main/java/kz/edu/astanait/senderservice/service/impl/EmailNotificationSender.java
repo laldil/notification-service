@@ -12,6 +12,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -29,19 +31,24 @@ public class EmailNotificationSender implements NotificationSender {
 
     @Async
     @Override
-    public void sendNotification(String contact, String message) {
-        try {
-            var mimeMessage = emailSender.createMimeMessage();
+    public CompletableFuture<Boolean> sendNotification(String contact, String message) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                var mimeMessage = emailSender.createMimeMessage();
 
-            var helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-            helper.setFrom(email);
-            helper.setTo(contact);
-            helper.setSubject("Notification from service");
-            helper.setText(message);
+                var helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+                helper.setFrom(email);
+                helper.setTo(contact);
+                helper.setSubject("Notification from service");
+                helper.setText(message);
 
-            emailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            log.error(e.getMessage(), e);
-        }
+                emailSender.send(mimeMessage);
+                log.info("Sent email notification to {}", contact);
+                return true;
+            } catch (MessagingException e) {
+                log.error("Failed to send email notification to {}: {}", contact, e.getMessage());
+                return false;
+            }
+        });
     }
 }

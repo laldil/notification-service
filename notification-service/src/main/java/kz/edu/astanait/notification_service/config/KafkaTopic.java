@@ -14,18 +14,4 @@ public class KafkaTopic {
                 .partitions(3)
                 .build();
     }
-
-    @Bean
-    public NewTopic retryTopic() {
-        return TopicBuilder.name("retry-topic")
-                .partitions(1)
-                .build();
-    }
-
-    @Bean
-    public NewTopic deadLetterTopic() {
-        return TopicBuilder.name("dead-letter")
-                .partitions(1)
-                .build();
-    }
 }

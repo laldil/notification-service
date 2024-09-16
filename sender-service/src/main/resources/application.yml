@@ -21,3 +21,6 @@ settings:
     whatsapp-number: ${TWILIO_WHATSAPP_NUMBER}
   kafka:
     server: localhost:9092
+    backoff:
+      intervalMs: 5000
+      attempts: 3

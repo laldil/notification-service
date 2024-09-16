@@ -9,6 +9,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -21,8 +23,22 @@ public class NotificationServiceImpl implements NotificationService {
     @KafkaListener(topics = "notification-topic", groupId = "notification",
             containerFactory = "notificationKafkaListenerContainerFactory")
     public void sendNotification(NotificationDto request) {
-        log.info("Received notification: {}", request.getContact());
-        var sender = notificationFactory.getSender(request.getContactType());
-        sender.sendNotification(request.getContact(), request.getMessage());
+        log.info("Received message from kafka. Notification for contact: {}", request.getContact());
+        try {
+            var sender = notificationFactory.getSender(request.getContactType());
+
+            CompletableFuture<Boolean> future = sender.sendNotification(request.getContact(), request.getMessage());
+            future.thenAccept(isSent -> {
+                if (isSent) {
+                    log.info("Notification successfully sent to: {}", request.getContact());
+                } else {
+                    log.warn("Failed to send notification to: {}", request.getContact());
+                    throw new RuntimeException("Notification sending failed");
+                }
+            });
+        } catch (Exception e) {
+            log.error("Error while sending notification to {}: {}", request.getContact(), e.getMessage());
+            throw e;
+        }
     }
 }

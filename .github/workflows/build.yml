@@ -46,7 +46,7 @@ jobs:
           && echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
 
       - name: Run tests
-        run: mvn test
+        run: cd notification-service && mvn test
 
       - name: Build application
-        run: docker build -t notification-service .
+        run: cd notification service && docker build -t notification-service .

@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: sender-service
+  mail:
+    host: ${EMAIL_HOST}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    port: ${EMAIL_PORT}
+    properties:
+      mail.smtp.starttls.enable: true
+      mail.smtp.auth: true
+
+settings:
+  twilio:
+    accountSid: ${TWILIO_SID}
+    authToken: ${TWILIO_TOKEN}
+    number: ${TWILIO_NUMBER}
+    whatsapp-number: ${TWILIO_WHATSAPP_NUMBER}
+  kafka:
+    server: localhost:9092

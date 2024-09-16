@@ -49,4 +49,4 @@ jobs:
         run: cd notification-service && mvn test
 
       - name: Build application
-        run: cd notification service && docker build -t notification-service .
+        run: docker build -t notification-service .

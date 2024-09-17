@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16
+    container_name: db
+    environment:
+      POSTGRES_DB: notification_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 7777
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: kafka
+    ports:
+      - 9092:9092
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification_service
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      DATASOURCE_URL: jdbc:postgresql://db:5432/notification_service
+      KAFKA_SERVER: kafka:9092
+    depends_on:
+      - db
+      - kafka
+    ports:
+      - 8080:8080
+
+  sender-service:
+    build: ./sender-service
+    container_name: sender-service
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_PORT: ${EMAIL_PORT}
+      TWILIO_SID: ${TWILIO_SID}
+      TWILIO_TOKEN: ${TWILIO_TOKEN}
+      TWILIO_NUMBER: ${TWILIO_NUMBER}
+      TWILIO_WHATSAPP_NUMBER: ${TWILIO_WHATSAPP_NUMBER}
+      KAFKA_SERVER: kafka:9092
+    depends_on:
+      - db
+      - kafka
+    ports:
+      - 8081:8081
+volumes:
+  db_data:
+

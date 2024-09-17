@@ -22,5 +22,4 @@ settings:
   kafka:
     server: localhost:9092
     backoff:
-      intervalMs: 5000
       attempts: 3

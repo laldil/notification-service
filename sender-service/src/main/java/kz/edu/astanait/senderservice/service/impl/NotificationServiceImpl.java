@@ -5,7 +5,12 @@ import kz.edu.astanait.senderservice.service.NotificationService;
 import kz.edu.astanait.senderservice.service.factory.NotificationFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,6 +23,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationFactory notificationFactory;
 
     @Override
+    @RetryableTopic(attempts = "${settings.kafka.backoff.attempts}", backoff = @Backoff(delay = 5000))
     @KafkaListener(topics = "notification-topic", groupId = "notification",
             containerFactory = "notificationKafkaListenerContainerFactory")
     public void sendNotification(NotificationDto request) {
@@ -41,4 +47,10 @@ public class NotificationServiceImpl implements NotificationService {
             throw e;
         }
     }
+
+    @DltHandler
+    public void listenDLT(NotificationDto notificationDto, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Header(KafkaHeaders.OFFSET) long offset) {
+        log.info("DLT Received : {} , from {} , offset {}", notificationDto.getContact(), topic, offset);
+    }
+
 }

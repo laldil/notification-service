@@ -6,7 +6,6 @@ import kz.edu.astanait.senderservice.service.factory.NotificationFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +18,6 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationFactory notificationFactory;
 
     @Override
-    @Async
     @KafkaListener(topics = "notification-topic", groupId = "notification",
             containerFactory = "notificationKafkaListenerContainerFactory")
     public void sendNotification(NotificationDto request) {
@@ -32,9 +30,11 @@ public class NotificationServiceImpl implements NotificationService {
                 if (isSent) {
                     log.info("Notification successfully sent to: {}", request.getContact());
                 } else {
-                    log.warn("Failed to send notification to: {}", request.getContact());
                     throw new RuntimeException("Notification sending failed");
                 }
+            }).exceptionally(e -> {
+                log.error("Error while sending notification to {}: {}", request.getContact(), e.getMessage(), e);
+                throw new RuntimeException(e.getMessage());
             });
         } catch (Exception e) {
             log.error("Error while sending notification to {}: {}", request.getContact(), e.getMessage());
